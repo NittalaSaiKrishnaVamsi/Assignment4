@@ -1,0 +1,95 @@
+import datetime
+
+vaccine_schedule = {
+    "BCG": "At birth",
+    "Hepatitis B": "At birth, 6 weeks, 14 weeks",
+    "DTP": "6 weeks, 10 weeks, 14 weeks",
+    "Polio": "At birth, 6 weeks, 10 weeks, 14 weeks",
+    "MMR": "9 months, 15 months",
+    "Varicella": "12 months"
+}
+
+class Parent:
+    def __init__(self, name, password):
+        self.name = name
+        self.password = password
+        self.children = {}
+        self.appointments = []
+
+    def add_child(self, name, birth_date):
+        self.children[name] = birth_date
+
+    def schedule_vaccination(self, child_name, vaccine):
+        if child_name in self.children and vaccine in vaccine_schedule:
+            date_today = datetime.date.today()
+            appointment = {
+                "Child": child_name,
+                "Vaccine": vaccine,
+                "Date": date_today
+            }
+            self.appointments.append(appointment)
+            print(f"Appointment scheduled for {child_name} to receive {vaccine} on {date_today}.")
+        else:
+            print("Invalid child name or vaccine.")
+
+    def view_appointments(self):
+        print("\nAppointments:")
+        for appointment in self.appointments:
+            print(f"{appointment['Child']} - {appointment['Vaccine']} on {appointment['Date']}")
+
+    def view_vaccine_schedule(self):
+        print("\nVaccine Schedule:")
+        for vaccine, timing in vaccine_schedule.items():
+            print(f"{vaccine}: {timing}")
+
+
+def main():
+    print("Welcome to the Child Vaccination Management System")
+
+    name = input("Enter your name: ")
+    password = input("Set your password: ")
+    parent = Parent(name, password)
+    
+
+    while True:
+        entered_password = input("Enter your password to access the system: ")
+        if entered_password == parent.password:
+            break
+        else:
+            print("Incorrect password. Please try again.")
+
+    while True:
+        print("\nMenu:")
+        print("1. Add Child")
+        print("2. Schedule Vaccination")
+        print("3. View Appointments")
+        print("4. View Vaccine Schedule")
+        print("5. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            child_name = input("Enter child's name: ")
+            birth_date = input("Enter child's birth date (YYYY-MM-DD): ")
+            parent.add_child(child_name, birth_date)
+
+        elif choice == "2":
+            child_name = input("Enter child's name: ")
+            vaccine = input("Enter vaccine name: ")
+            parent.schedule_vaccination(child_name, vaccine)
+
+        elif choice == "3":
+            parent.view_appointments()
+
+        elif choice == "4":
+            parent.view_vaccine_schedule()
+
+        elif choice == "5":
+            print("Thank you for using the Child Vaccination Management System.")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
